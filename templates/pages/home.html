@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REJA</title>
+    <title>GOAL</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" crossorigin="anonymous">
 </head>
 <body style="background-color: #b8bbd1">
 <div class="container">
-    <h1 class="display-4 text-center py-1">REJA VA MAQSADLAR</h1>
+    <h1 class="display-4 text-center py-1">GOALS</h1>
     <div class="jumbotron p-3 shadow-sm">
         <form id="create-form">
             <div class="d-flex align-items-center">
-                <input id="create-field" name="reja" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1"/>
-                <button class="btn btn-primary" style="border-radius: 20px">Yangi Reja Qo'shish</button>
+                <input id="create-field" name="goalContent" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1"/>
+                <button class="btn btn-primary" style="border-radius: 20px">Yangi Goal Qo'shish</button>
             </div>
         </form>
     </div>
@@ -31,7 +31,7 @@
         {% endfor %}
     </ul>
 
-    <button id="clean-all" class="btn btn-danger" style="border-radius: 20px">Hamma Rejalarni O'chirish</button>
+    <button id="clean-all" class="btn btn-danger" style="border-radius: 20px">Hamma Goallarni O'chirish</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js"></script>
 <script>
@@ -47,9 +47,9 @@ function itemTemplate(item) {
 
 document.getElementById('create-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    axios.post('/create-item', { reja: document.getElementById('create-field').value })
+    axios.post('/create-goal', { goalContent: document.getElementById('create-field').value })
         .then(res => {
-            document.getElementById('item-list').insertAdjacentHTML('beforeend', itemTemplate({ id: res.data.id, reja: document.getElementById('create-field').value }));
+            document.getElementById('item-list').insertAdjacentHTML('beforeend', itemTemplate({ id: res.data.id, goalContent: document.getElementById('create-field').value }));
             document.getElementById('create-field').value = '';
             document.getElementById('create-field').focus();
         });
