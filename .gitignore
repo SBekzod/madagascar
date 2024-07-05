@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+
+# Virtual Environment
+.env
+
+# Static files
+staticfiles/
+
+# Media files
+media/
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+*.swo

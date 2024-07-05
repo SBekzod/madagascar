@@ -1,5 +1,84 @@
-<div class="row text-center">
-  <div class="col">
-    <h1>Welcome to HomePage</h1>
-  </div>
+<!-- goal/templates/goal/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REJA</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" crossorigin="anonymous">
+</head>
+<body style="background-color: #b8bbd1">
+<div class="container">
+    <h1 class="display-4 text-center py-1">REJA VA MAQSADLAR</h1>
+    <div class="jumbotron p-3 shadow-sm">
+        <form id="create-form">
+            <div class="d-flex align-items-center">
+                <input id="create-field" name="reja" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1"/>
+                <button class="btn btn-primary" style="border-radius: 20px">Yangi Reja Qo'shish</button>
+            </div>
+        </form>
+    </div>
+
+    <ul id="item-list" class="list-group pb-5">
+        {% for item in goals %}
+        <li class="list-group-item list-group-item-info d-flex align-items-center justify-content-between">
+            <span class="item-text">{{ item.goalContent }}</span>
+            <div>
+                <button data-id="{{ item.id }}" class="edit-me btn btn-secondary btn-sm mr-1">O'zgartirish</button>
+                <button data-id="{{ item.id }}" class="delete-me btn btn-danger btn-sm">O'chirish</button>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <button id="clean-all" class="btn btn-danger" style="border-radius: 20px">Hamma Rejalarni O'chirish</button>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js"></script>
+<script>
+function itemTemplate(item) {
+    return `<li class="list-group-item list-group-item-info d-flex align-items-center justify-content-between">
+                <span class="item-text">${item.goalContent}</span>
+                <div>
+                    <button data-id="${item.id}" class="edit-me btn btn-secondary btn-sm mr-1">O'zgartirish</button>
+                    <button data-id="${item.id}" class="delete-me btn btn-danger btn-sm">O'chirish</button>
+                </div>
+            </li>`;
+}
+
+document.getElementById('create-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    axios.post('/create-item', { reja: document.getElementById('create-field').value })
+        .then(res => {
+            document.getElementById('item-list').insertAdjacentHTML('beforeend', itemTemplate({ id: res.data.id, reja: document.getElementById('create-field').value }));
+            document.getElementById('create-field').value = '';
+            document.getElementById('create-field').focus();
+        });
+});
+
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('delete-me')) {
+        if (confirm("Do you wanna delete")) {
+            axios.post('/delete-item', { id: e.target.getAttribute('data-id') }).then(res => {
+                e.target.parentElement.parentElement.remove();
+            });
+        }
+    }
+
+    if (e.target.classList.contains('edit-me')) {
+        let userInput = prompt("O'zgartirish kiriting", e.target.parentElement.parentElement.querySelector('.item-text').innerHTML);
+        if (userInput) {
+            axios.post('/update-item', { id: e.target.getAttribute('data-id'), new_reja: userInput }).then(res => {
+                e.target.parentElement.parentElement.querySelector('.item-text').innerHTML = userInput;
+            });
+        }
+    }
+});
+
+document.getElementById('clean-all').addEventListener('click', function () {
+    axios.post('/delete-all-items').then(res => {
+        document.getElementById('item-list').innerHTML = '';
+    });
+});
+</script>
+</body>
+</html>
