@@ -1,1 +1,1 @@
-INSERT INTO goal (goalContent) VALUES ('{{ goalContent }}');
+INSERT INTO goal (goalContent) VALUES ('{{ goalContent }}'); 

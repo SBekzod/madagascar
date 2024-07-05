@@ -20,3 +20,15 @@ def create_goal(request):
         create_goal = render_to_string('sql/create_goal.sql', {'goalContent': data['goalContent']})
         dict_fetchall(create_goal)  
         return JsonResponse({'status': 'success'})
+    
+
+@csrf_exempt
+def update_goal(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        goalContent = data.get('new_goal')
+        goal_id = data.get('id')
+        
+        update_goal = render_to_string('sql/update_goal.sql', {'goalContent': goalContent, 'goalId': goal_id})
+        dict_fetchall(update_goal)  
+        return JsonResponse({'status': 'success'})

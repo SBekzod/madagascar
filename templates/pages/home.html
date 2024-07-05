@@ -1,4 +1,3 @@
-<!-- goal/templates/goal/home.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,8 +23,8 @@
         <li class="list-group-item list-group-item-info d-flex align-items-center justify-content-between">
             <span class="item-text">{{ item.goalContent }}</span>
             <div>
-                <button data-id="{{ item.id }}" class="edit-me btn btn-secondary btn-sm mr-1">O'zgartirish</button>
-                <button data-id="{{ item.id }}" class="delete-me btn btn-danger btn-sm">O'chirish</button>
+                <button data-id="{{ item.goalId }}" class="edit-me btn btn-secondary btn-sm mr-1">O'zgartirish</button>
+                <button data-id="{{ item.goalId }}" class="delete-me btn btn-danger btn-sm">O'chirish</button>
             </div>
         </li>
         {% endfor %}
@@ -39,8 +38,8 @@ function itemTemplate(item) {
     return `<li class="list-group-item list-group-item-info d-flex align-items-center justify-content-between">
                 <span class="item-text">${item.goalContent}</span>
                 <div>
-                    <button data-id="${item.id}" class="edit-me btn btn-secondary btn-sm mr-1">O'zgartirish</button>
-                    <button data-id="${item.id}" class="delete-me btn btn-danger btn-sm">O'chirish</button>
+                    <button data-id="${item.goalId}" class="edit-me btn btn-secondary btn-sm mr-1">O'zgartirish</button>
+                    <button data-id="${item.goalId}" class="delete-me btn btn-danger btn-sm">O'chirish</button>
                 </div>
             </li>`;
 }
@@ -67,7 +66,7 @@ document.addEventListener('click', function (e) {
     if (e.target.classList.contains('edit-me')) {
         let userInput = prompt("O'zgartirish kiriting", e.target.parentElement.parentElement.querySelector('.item-text').innerHTML);
         if (userInput) {
-            axios.post('/update-item', { id: e.target.getAttribute('data-id'), new_reja: userInput }).then(res => {
+            axios.post('/update-goal', { id: e.target.getAttribute('data-id'), new_goal: userInput }).then(res => {
                 e.target.parentElement.parentElement.querySelector('.item-text').innerHTML = userInput;
             });
         }
