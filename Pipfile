@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 django = "==4.2"
 mysqlclient = "*"
-python-dotenv = "*"
 mysql-connector-python = "*"
 
 [dev-packages]

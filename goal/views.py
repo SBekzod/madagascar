@@ -8,6 +8,7 @@ from .utils import dict_fetchall
 
 
 def home_view(request, *args, **kwargs):
+    print('home_view')
     select_goals_sql = render_to_string('sql/select_goals.sql')
     select_goals = dict_fetchall(select_goals_sql)
     return render(request, "pages/home.html", {'goals': select_goals}, status=200)
@@ -15,6 +16,7 @@ def home_view(request, *args, **kwargs):
 
 @csrf_exempt
 def create_goal_view(request, *args, **kwargs):
+    print('create_goal_view')
     if request.method == 'POST':
         data = json.loads(request.body)
         create_goal = render_to_string('sql/create_goal.sql', {'goalContent': data['goalContent']})
@@ -28,6 +30,7 @@ def create_goal_view(request, *args, **kwargs):
 
 @csrf_exempt
 def update_goal_view(request, *args, **kwargs):
+    print('update_goal_view')
     if request.method == 'POST':
         data = json.loads(request.body)
         goalContent = data.get('new_goal')
@@ -40,6 +43,7 @@ def update_goal_view(request, *args, **kwargs):
     
 @csrf_exempt
 def delete_goal_view(request, *args, **kwargs):
+    print('delete_goal_view')
     if request.method == 'POST':
         data = json.loads(request.body)
         goal_id = data.get('id')
@@ -51,6 +55,7 @@ def delete_goal_view(request, *args, **kwargs):
 
 @csrf_exempt
 def delete_all_goals_view(request):
+    print('delete_all_goals_view')
     if request.method == 'POST':
         delete_all_goals_sql = render_to_string('sql/delete_all_goals.sql')
         dict_fetchall(delete_all_goals_sql)
