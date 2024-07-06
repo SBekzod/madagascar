@@ -34,6 +34,7 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js"></script>
 <script>
+
 function itemTemplate(item) {
     return `<li class="list-group-item list-group-item-info d-flex align-items-center justify-content-between">
                 <span class="item-text">${item.goalContent}</span>
@@ -48,7 +49,9 @@ document.getElementById('create-form').addEventListener('submit', function (e) {
     e.preventDefault();
     axios.post('/create-goal', { goalContent: document.getElementById('create-field').value })
         .then(res => {
-            document.getElementById('item-list').insertAdjacentHTML('beforeend', itemTemplate({ id: res.data.id, goalContent: document.getElementById('create-field').value }));
+            console.log('Created goal:', res.data);
+            const newItem = { goalId: res.data.goalId, goalContent: document.getElementById('create-field').value };
+            document.getElementById('item-list').insertAdjacentHTML('beforeend', itemTemplate(newItem));
             document.getElementById('create-field').value = '';
             document.getElementById('create-field').focus();
         });
@@ -57,7 +60,7 @@ document.getElementById('create-form').addEventListener('submit', function (e) {
 document.addEventListener('click', function (e) {
     if (e.target.classList.contains('delete-me')) {
         if (confirm("Do you wanna delete")) {
-            axios.post('/delete-item', { id: e.target.getAttribute('data-id') }).then(res => {
+            axios.post('/delete-goal', { id: e.target.getAttribute('data-id') }).then(res => {
                 e.target.parentElement.parentElement.remove();
             });
         }
@@ -74,10 +77,13 @@ document.addEventListener('click', function (e) {
 });
 
 document.getElementById('clean-all').addEventListener('click', function () {
-    axios.post('/delete-all-items').then(res => {
+    axios.post('/delete-all-goals').then(res => {
         document.getElementById('item-list').innerHTML = '';
     });
 });
+
+
+
 </script>
 </body>
 </html>

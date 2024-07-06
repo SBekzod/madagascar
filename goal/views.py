@@ -14,16 +14,20 @@ def home_view(request, *args, **kwargs):
 
 
 @csrf_exempt
-def create_goal(request):
+def create_goal_view(request, *args, **kwargs):
     if request.method == 'POST':
         data = json.loads(request.body)
         create_goal = render_to_string('sql/create_goal.sql', {'goalContent': data['goalContent']})
         dict_fetchall(create_goal)  
-        return JsonResponse({'status': 'success'})
+        
+        last_insert_id_sql = "SELECT LAST_INSERT_ID() as goalId;"
+        last_insert_id = dict_fetchall(last_insert_id_sql)[0]
+        
+        return JsonResponse({'status': 'success', 'goalId': last_insert_id['goalId']})
     
 
 @csrf_exempt
-def update_goal(request):
+def update_goal_view(request, *args, **kwargs):
     if request.method == 'POST':
         data = json.loads(request.body)
         goalContent = data.get('new_goal')
@@ -31,4 +35,23 @@ def update_goal(request):
         
         update_goal = render_to_string('sql/update_goal.sql', {'goalContent': goalContent, 'goalId': goal_id})
         dict_fetchall(update_goal)  
+        return JsonResponse({'status': 'success'})
+    
+    
+@csrf_exempt
+def delete_goal_view(request, *args, **kwargs):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        goal_id = data.get('id')
+
+        delete_single_goal = render_to_string('sql/delete_single_goal.sql', {'goalId': goal_id})
+        dict_fetchall(delete_single_goal)  
+        return JsonResponse({'status': 'success'})
+    
+
+@csrf_exempt
+def delete_all_goals_view(request):
+    if request.method == 'POST':
+        delete_all_goals_sql = render_to_string('sql/delete_all_goals.sql')
+        dict_fetchall(delete_all_goals_sql)
         return JsonResponse({'status': 'success'})
