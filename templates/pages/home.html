@@ -6,35 +6,35 @@
     <title>GOAL</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" crossorigin="anonymous">
 </head>
-<body style="background-color: #b8bbd1">
+<body style="background-color: #cceeff">
 <div class="container">
-    <h1 class="display-4 text-center py-1">GOALS</h1>
-    <div class="jumbotron p-3 shadow-sm">
+    <h1 class="display-4 text-center py-1">MAQSADLAR</h1>
+    <div class="jumbotron p-3 shadow-sm bg-light">
         <form id="create-form">
             <div class="d-flex align-items-center">
                 <input id="create-field" name="goalContent" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1"/>
-                <button class="btn btn-primary" style="border-radius: 20px">Yangi Goal Qo'shish</button>
+                <button class="btn btn-primary" style="border-radius: 17px">Yangi Maqsad Qo'shish</button>
             </div>
         </form>
     </div>
 
     <ul id="item-list" class="list-group pb-5">
         {% for item in goals %}
-        <li class="list-group-item list-group-item-info d-flex align-items-center justify-content-between">
+        <li class="list-group-item bg-light d-flex align-items-center justify-content-between">
             <span class="item-text">{{ item.goalContent }}</span>
             <div>
-                <button data-id="{{ item.goalId }}" class="edit-me btn btn-secondary btn-sm mr-1">O'zgartirish</button>
+                <button data-id="{{ item.goalId }}" class="edit-me btn btn-success btn-sm mr-1">O'zgartirish</button>
                 <button data-id="{{ item.goalId }}" class="delete-me btn btn-danger btn-sm">O'chirish</button>
             </div>
         </li>
         {% endfor %}
     </ul>
 
-    <button id="clean-all" class="btn btn-danger" style="border-radius: 20px">Hamma Goalni O'chirish</button>
+    <button id="clean-all" class="btn btn-danger" style="border-radius: 17px">Hamma Maqsadlarni O'chirish</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js"></script>
-<script>
 
+<script>
 function itemTemplate(item) {
     return `<li class="list-group-item list-group-item-info d-flex align-items-center justify-content-between">
                 <span class="item-text">${item.goalContent}</span>
@@ -81,9 +81,6 @@ document.getElementById('clean-all').addEventListener('click', function () {
         document.getElementById('item-list').innerHTML = '';
     });
 });
-
-
-
 </script>
 </body>
 </html>
