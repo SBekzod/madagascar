@@ -54,14 +54,14 @@
     </div>
 
     <ul id="item-list" class="list-group pb-5">
-        {% for item in goals %}
+        {% for item in plans %}
         <li style="border-radius: 20px;" class="list-group-item bg-light d-flex align-items-center justify-content-between custom-list">
-            <span class="item-text">{{ item.goalContent }}</span>
+            <span class="item-text">{{ item.content }}</span>
             <div>
-                <button data-id="{{ item.goalId }}" class="edit-me btn btn-success btn-sm mr-1 custom-radius">
+                <button data-id="{{ item.id }}" class="edit-me btn btn-success btn-sm mr-1 custom-radius">
                     <i style="margin-right: 5px;" class="bi bi-pencil-square"></i>Edit
                 </button>
-                <button data-id="{{ item.goalId }}" class="delete-me btn btn-danger btn-sm custom-radius">
+                <button data-id="{{ item.id }}" class="delete-me btn btn-danger btn-sm custom-radius">
                     <i style="margin-right: 5px;" class="bi bi-trash"></i> Delete
                 </button>
             </div>
@@ -76,12 +76,12 @@
 <script>
 function itemTemplate(item) {
     return `<li style="border-radius: 20px" class="list-group-item bg-light d-flex align-items-center justify-content-between custom-list">
-                <span class="item-text">${item.goalContent}</span>
+                <span class="item-text">${item.content}</span>
                 <div>
-                    <button data-id="${item.goalId}" class="edit-me btn btn-success btn-sm mr-1 custom-radius">
+                    <button data-id="${item.id}" class="edit-me btn btn-success btn-sm mr-1 custom-radius">
                         <i style="margin-right: 5px;" class="bi bi-pencil-square"></i>Edit    
                     </button>
-                    <button data-id="${item.goalId}" class="delete-me btn btn-danger btn-sm custom-radius">
+                    <button data-id="${item.id}" class="delete-me btn btn-danger btn-sm custom-radius">
                         <i style="margin-right: 5px;" class="bi bi-trash"></i> Delete
                     </button>
                 </div>
@@ -90,10 +90,10 @@ function itemTemplate(item) {
 
 document.getElementById('create-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    axios.post('/create-goal', { goalContent: document.getElementById('create-field').value })
+    axios.post('/create-goal', { content: document.getElementById('create-field').value })
         .then(res => {
-            console.log('Created goal:', res.data);
-            const newItem = { goalId: res.data.goalId, goalContent: document.getElementById('create-field').value };
+            console.log('Created Plan:', res.data);
+            const newItem = { id: res.data.id, content: document.getElementById('create-field').value };
             document.getElementById('item-list').insertAdjacentHTML('beforeend', itemTemplate(newItem));
             document.getElementById('create-field').value = '';
             document.getElementById('create-field').focus();
@@ -102,7 +102,7 @@ document.getElementById('create-form').addEventListener('submit', function (e) {
 
 document.addEventListener('click', function (e) {
     if (e.target.classList.contains('delete-me')) {
-        if (confirm("Do you wanna delete")) {
+        if (confirm("Do you wanna delete?")) {
             axios.post('/delete-goal', { id: e.target.getAttribute('data-id') }).then(res => {
                 e.target.parentElement.parentElement.remove();
             });
@@ -112,7 +112,7 @@ document.addEventListener('click', function (e) {
     if (e.target.classList.contains('edit-me')) {
         let userInput = prompt("Change your input", e.target.parentElement.parentElement.querySelector('.item-text').innerHTML);
         if (userInput) {
-            axios.post('/update-goal', { id: e.target.getAttribute('data-id'), new_goal: userInput }).then(res => {
+            axios.post('/update-goal', { id: e.target.getAttribute('data-id'), new_plan: userInput }).then(res => {
                 e.target.parentElement.parentElement.querySelector('.item-text').innerHTML = userInput;
             });
         }

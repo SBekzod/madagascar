@@ -10,9 +10,9 @@ from .utils import dict_fetchall
 def home_view(request, *args, **kwargs):
     print('home_view')
     
-    select_goals_sql = render_to_string('sql/select_goals.sql')
-    select_goals = dict_fetchall(select_goals_sql)
-    return render(request, "pages/home.html", {'goals': select_goals}, status=200)
+    select_plans_sql = render_to_string('sql/select_plans.sql')
+    select_plans = dict_fetchall(select_plans_sql)
+    return render(request, "pages/home.html", {'plans': select_plans}, status=200)
 
 
 @csrf_exempt
@@ -21,14 +21,14 @@ def create_goal_view(request, *args, **kwargs):
     
     if request.method == 'POST':
         data = json.loads(request.body)
-        create_goal = render_to_string('sql/create_goal.sql', {'goalContent': data['goalContent']})
-        dict_fetchall(create_goal)  
+        create_plan = render_to_string('sql/create_plan.sql', {'content': data['content']})
+        dict_fetchall(create_plan)  
         
-        last_insert_id_sql = "SELECT LAST_INSERT_ID() as goalId;"
+        last_insert_id_sql = "SELECT LAST_INSERT_ID() as id;"
         last_insert_id = dict_fetchall(last_insert_id_sql)[0]
         
-        print('Created Goal:', {data['goalContent'], last_insert_id['goalId']})
-        return JsonResponse({'status': 'success', 'goalId': last_insert_id['goalId']})
+        print('Created Plan:', {'content': data['content'], 'id': last_insert_id['id']})
+        return JsonResponse({'status': 'success', 'id': last_insert_id['id']})
     
 
 @csrf_exempt
@@ -37,13 +37,13 @@ def update_goal_view(request, *args, **kwargs):
     
     if request.method == 'POST':
         data = json.loads(request.body)
-        goalContent = data.get('new_goal')
-        goal_id = data.get('id')
+        content = data.get('new_plan')
+        id = data.get('id')
         
-        update_goal = render_to_string('sql/update_goal.sql', {'goalContent': goalContent, 'goalId': goal_id})
-        dict_fetchall(update_goal)
+        update_plan = render_to_string('sql/update_plan.sql', {'content': content, 'id': id})
+        dict_fetchall(update_plan)
         
-        print("Updated Goal:", {'goalContent': goalContent, 'goalID': goal_id}) 
+        print("Updated Plan:", {'content': content, 'id': id}) 
         return JsonResponse({'status': 'success'})
     
     
@@ -53,10 +53,10 @@ def delete_goal_view(request, *args, **kwargs):
     
     if request.method == 'POST':
         data = json.loads(request.body)
-        goal_id = data.get('id')
+        id = data.get('id')
 
-        delete_single_goal = render_to_string('sql/delete_single_goal.sql', {'goalId': goal_id})
-        dict_fetchall(delete_single_goal)  
+        delete_single_plan = render_to_string('sql/delete_single_plan.sql', {'id': id})
+        dict_fetchall(delete_single_plan)  
         return JsonResponse({'status': 'success'})
     
 
@@ -65,6 +65,6 @@ def delete_all_goals_view(request):
     print('delete_all_goals_view')
     
     if request.method == 'POST':
-        delete_all_goals_sql = render_to_string('sql/delete_all_goals.sql')
-        dict_fetchall(delete_all_goals_sql)
+        delete_all_plans_sql = render_to_string('sql/delete_all_plans.sql')
+        dict_fetchall(delete_all_plans_sql)
         return JsonResponse({'status': 'success'})

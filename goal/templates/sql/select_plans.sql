@@ -1,6 +1,6 @@
 -- select_goals.sql
-SELECT goalId,
-         goalContent,
+SELECT id,
+         content,
          createdAt,
          updatedAt
-from goal;
+FROM plan;
