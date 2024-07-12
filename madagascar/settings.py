@@ -61,7 +61,7 @@ WSGI_APPLICATION = "madagascar.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django',
-        'NAME': 'defaultdb',
+        'NAME': 'plan-optional',
         'USER': 'avnadmin',
         'PASSWORD': 'AVNS_Rsfn5prenYGCc2BPx4D',
         'HOST': 'mysql-server-abduraimovismoil98-f998.h.aivencloud.com',

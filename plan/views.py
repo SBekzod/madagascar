@@ -1,17 +1,14 @@
-import json 
+import json
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-
-from .utils import dict_fetchall
+from .models import Plan
 
 
 def home_view(request, *args, **kwargs):
     print('home_view')
     
-    select_plans_sql = render_to_string('sql/select_plans.sql')
-    select_plans = dict_fetchall(select_plans_sql)
+    select_plans = Plan.objects.all()
     return render(request, "pages/home.html", {'plans': select_plans}, status=200)
 
 
@@ -21,14 +18,10 @@ def create_plan_view(request, *args, **kwargs):
     
     if request.method == 'POST':
         data = json.loads(request.body)
-        create_plan = render_to_string('sql/create_plan.sql', {'content': data['content']})
-        dict_fetchall(create_plan)  
+        new_plan = Plan.objects.create(content=data['content'])
         
-        last_insert_id_sql = "SELECT LAST_INSERT_ID() as id;"
-        last_insert_id = dict_fetchall(last_insert_id_sql)[0]
-        
-        print('Created Plan:', {'content': data['content'], 'id': last_insert_id['id']})
-        return JsonResponse({'status': 'success', 'id': last_insert_id['id']})
+        print('Created Plan:', {'content': data['content'], 'id': new_plan.id})
+        return JsonResponse({'status': 'success', 'id': new_plan.id})
     
 
 @csrf_exempt
@@ -38,13 +31,16 @@ def update_plan_view(request, *args, **kwargs):
     if request.method == 'POST':
         data = json.loads(request.body)
         content = data.get('new_plan')
-        id = data.get('id')
+        plan_id = data.get('id')
         
-        update_plan = render_to_string('sql/update_plan.sql', {'content': content, 'id': id})
-        dict_fetchall(update_plan)
-        
-        print("Updated Plan:", {'content': content, 'id': id}) 
-        return JsonResponse({'status': 'success'})
+        try:
+            plan = Plan.objects.get(id=plan_id)
+            plan.content = content
+            plan.save()
+            print("Updated Plan:", {'content': content, 'id': plan.id}) 
+            return JsonResponse({'status': 'success'})
+        except Plan.DoesNotExist:
+            return JsonResponse({'status': 'fail', 'message': 'Plan not found'}, status=404)
     
     
 @csrf_exempt
@@ -53,11 +49,14 @@ def delete_plan_view(request, *args, **kwargs):
     
     if request.method == 'POST':
         data = json.loads(request.body)
-        id = data.get('id')
-
-        delete_single_plan = render_to_string('sql/delete_single_plan.sql', {'id': id})
-        dict_fetchall(delete_single_plan)  
-        return JsonResponse({'status': 'success'})
+        plan_id = data.get('id')
+        
+        try:
+            plan = Plan.objects.get(id=plan_id)
+            plan.delete()
+            return JsonResponse({'status': 'success'})
+        except Plan.DoesNotExist:
+            return JsonResponse({'status': 'fail', 'message': 'Plan not found'}, status=404)
     
 
 @csrf_exempt
@@ -65,6 +64,5 @@ def delete_all_plans_view(request):
     print('delete_all_plans_view')
     
     if request.method == 'POST':
-        delete_all_plans_sql = render_to_string('sql/delete_all_plans.sql')
-        dict_fetchall(delete_all_plans_sql)
+        Plan.objects.all().delete()
         return JsonResponse({'status': 'success'})
