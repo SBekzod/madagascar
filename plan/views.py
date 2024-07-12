@@ -16,8 +16,8 @@ def home_view(request, *args, **kwargs):
 
 
 @csrf_exempt
-def create_goal_view(request, *args, **kwargs):
-    print('create_goal_view')
+def create_plan_view(request, *args, **kwargs):
+    print('create_plan_view')
     
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -32,8 +32,8 @@ def create_goal_view(request, *args, **kwargs):
     
 
 @csrf_exempt
-def update_goal_view(request, *args, **kwargs):
-    print('update_goal_view')
+def update_plan_view(request, *args, **kwargs):
+    print('update_plan_view')
     
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -48,8 +48,8 @@ def update_goal_view(request, *args, **kwargs):
     
     
 @csrf_exempt
-def delete_goal_view(request, *args, **kwargs):
-    print('delete_goal_view')
+def delete_plan_view(request, *args, **kwargs):
+    print('delete_plan_view')
     
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -61,8 +61,8 @@ def delete_goal_view(request, *args, **kwargs):
     
 
 @csrf_exempt
-def delete_all_goals_view(request):
-    print('delete_all_goals_view')
+def delete_all_plans_view(request):
+    print('delete_all_plans_view')
     
     if request.method == 'POST':
         delete_all_plans_sql = render_to_string('sql/delete_all_plans.sql')

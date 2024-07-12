@@ -47,7 +47,7 @@
     <div class="p-3">
         <form id="create-form">
             <div class="d-flex align-items-center">
-                <input id="create-field" name="goalContent" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1; border-radius: 20px;"/>
+                <input id="create-field" name="planContent" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1; border-radius: 20px;"/>
                 <button class="btn btn-primary" style="border-radius: 16px">Add New Plan</button>
             </div>
         </form>
@@ -90,7 +90,7 @@ function itemTemplate(item) {
 
 document.getElementById('create-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    axios.post('/create-goal', { content: document.getElementById('create-field').value })
+    axios.post('/create-plan', { content: document.getElementById('create-field').value })
         .then(res => {
             console.log('Created Plan:', res.data);
             const newItem = { id: res.data.id, content: document.getElementById('create-field').value };
@@ -103,7 +103,7 @@ document.getElementById('create-form').addEventListener('submit', function (e) {
 document.addEventListener('click', function (e) {
     if (e.target.classList.contains('delete-me')) {
         if (confirm("Do you wanna delete?")) {
-            axios.post('/delete-goal', { id: e.target.getAttribute('data-id') }).then(res => {
+            axios.post('/delete-plan', { id: e.target.getAttribute('data-id') }).then(res => {
                 e.target.parentElement.parentElement.remove();
             });
         }
@@ -112,7 +112,7 @@ document.addEventListener('click', function (e) {
     if (e.target.classList.contains('edit-me')) {
         let userInput = prompt("Change your input", e.target.parentElement.parentElement.querySelector('.item-text').innerHTML);
         if (userInput) {
-            axios.post('/update-goal', { id: e.target.getAttribute('data-id'), new_plan: userInput }).then(res => {
+            axios.post('/update-plan', { id: e.target.getAttribute('data-id'), new_plan: userInput }).then(res => {
                 e.target.parentElement.parentElement.querySelector('.item-text').innerHTML = userInput;
             });
         }
@@ -121,7 +121,7 @@ document.addEventListener('click', function (e) {
 
 document.getElementById('clean-all').addEventListener('click', function () {
     if(confirm('Are you sure you want to delete all plans?')) {
-        axios.post('/delete-all-goals').then(res => {
+        axios.post('/delete-all-plans').then(res => {
             document.getElementById('item-list').innerHTML = '';
         });
     }

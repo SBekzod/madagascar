@@ -1,4 +1,4 @@
--- select_goals.sql
+-- select_plans.sql
 SELECT id,
          content,
          createdAt,

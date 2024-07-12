@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     
     # service apps
-    "goal",
+    "plan",
 ]
 
 MIDDLEWARE = [
@@ -37,7 +37,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "plan.urls"
+ROOT_URLCONF = "madagascar.urls"
 
 TEMPLATES = [
     {
@@ -55,7 +55,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "plan.wsgi.application"
+WSGI_APPLICATION = "madagascar.wsgi.application"
 
 
 DATABASES = {
