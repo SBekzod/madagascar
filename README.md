@@ -1,4 +1,4 @@
-## Reminder Project
+## Madagascar Project
 
 1. Install pipenv
 
